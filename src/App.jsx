@@ -385,9 +385,11 @@ export default function Excavate() {
             {[
               ["problem", "The problem"],
               ["method", "Method"],
+              ["download", "Download"],
               ["prompts", "Prompts"],
               ["cost", "Cost"],
               ["philosophy", "Philosophy"],
+              ["about", "About"],
             ].map(([id, label]) => (
               <a
                 key={id}
@@ -558,6 +560,48 @@ export default function Excavate() {
             </div>
           </section>
 
+          {/* DOWNLOAD PARSER */}
+          <section id="download" style={{ paddingBottom: "var(--section-gap)" }}>
+            <div style={{
+              fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "var(--accent)",
+              fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 16
+            }}>
+              Download
+            </div>
+            <h2 style={{
+              fontFamily: "'Instrument Serif', serif", fontSize: 32, fontWeight: 400,
+              marginBottom: 10
+            }}>
+              Download the parser
+            </h2>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)",
+              marginBottom: 32, lineHeight: 1.6, maxWidth: 560
+            }}>
+              A Python script that parses your ChatGPT data export, splits conversations by theme,
+              and creates workable chunks for extraction. Run it on your zip file and it produces
+              an indexed, classified corpus ready for Cowork.
+            </p>
+            <a
+              href="/phase0_parse_export.py"
+              download
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 10,
+                padding: "14px 28px", background: "var(--accent)", color: "#fff",
+                borderRadius: 8, textDecoration: "none",
+                fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600,
+                transition: "opacity 0.15s"
+              }}
+              onMouseOver={e => e.currentTarget.style.opacity = "0.85"}
+              onMouseOut={e => e.currentTarget.style.opacity = "1"}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 1v9M8 10l-3-3M8 10l3-3M2 13h12" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              phase0_parse_export.py
+            </a>
+          </section>
+
           {/* PROMPTS */}
           <section id="prompts" style={{ paddingBottom: "var(--section-gap)" }}>
             <div style={{
@@ -695,6 +739,39 @@ export default function Excavate() {
                 The excavation tools above are designed to help you find those moments. 
                 But ultimately, only you can recognize them — because the value is in your 
                 judgment about what matters, and that's the one thing the AI can't do for you.
+              </p>
+            </div>
+          </section>
+
+          {/* ABOUT */}
+          <section id="about" style={{ paddingBottom: "var(--section-gap)" }}>
+            <div style={{
+              fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "var(--accent)",
+              fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 16
+            }}>
+              About
+            </div>
+            <div style={{
+              padding: "32px 36px", border: "1px solid var(--border)", borderRadius: 12,
+              background: "var(--surface)"
+            }}>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 16, lineHeight: 1.8,
+                color: "var(--muted)"
+              }}>
+                Built during an actual excavation of 2,578 conversations and 12.4 million tokens
+                from a ChatGPT archive spanning April 2023 to March 2026. The methodology and prompts
+                weren't planned — they emerged from trying to figure out what three years of AI
+                conversations were really worth. Built by{" "}
+                <a
+                  href="https://github.com/gschul"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--accent)", textDecoration: "none", borderBottom: "1px solid var(--accent)" }}
+                >
+                  Guy Schultz
+                </a>
+                .
               </p>
             </div>
           </section>
