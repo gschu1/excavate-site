@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth:*)",
+      "Bash(vercel --version)",
+      "Bash(git --version)",
+      "Bash(npm --version)",
+      "Bash(git config:*)"
+    ]
+  }
+}
