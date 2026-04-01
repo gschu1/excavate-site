@@ -107,6 +107,26 @@ For each significant concept or framework:
 - FUTURE TRIGGER: Under what conditions would this become immediately valuable?
 
 Organize as a structured reference document. No conversion pressure — just clean preservation.`
+  },
+  {
+    id: "archaeology",
+    title: "Retroactive product archaeology",
+    tier: "For builders",
+    model: "Opus",
+    description: "Connects a live product to its archived past. Not 'what's in the archive' but 'what in the archive strengthens what I'm building today.'",
+    prompt: `Read this conversation chunk. Here is what the product is TODAY:
+[describe current state]
+
+Here is what it WAS when this conversation happened:
+[describe earlier state]
+
+Your task — connect the past to the present:
+1. What did past-me see that present-me should recover?
+2. What did past-me get wrong?
+3. What decisions from then still hold up?
+4. What was exploration that went nowhere?
+5. What surprised you — connections between then and now that I might have missed?
+6. What from the past would strengthen the current product if recovered?`
   }
 ];
 
@@ -552,6 +572,38 @@ export default function Excavate() {
                 description="Work through chunks using the extraction prompts. This is where conversion happens. Each prompt is designed to answer 'what can this become?' — not 'what does this say?'"
                 detail="Use Sonnet for classification and structured extraction. Use Opus when you need honest assessment, creative judgment, or tracking how ideas evolved over time."
               />
+              <div style={{
+                padding: "22px 28px",
+                border: "1px solid var(--accent)",
+                borderLeft: "4px solid var(--accent)",
+                borderRadius: "0 10px 10px 0",
+                background: "var(--accent-light)"
+              }}>
+                <div style={{
+                  fontSize: 11, fontFamily: "'DM Sans', sans-serif", fontWeight: 700,
+                  letterSpacing: 1.2, textTransform: "uppercase", color: "var(--accent-dark)",
+                  marginBottom: 10
+                }}>
+                  Methodology note
+                </div>
+                <div style={{
+                  fontFamily: "'Instrument Serif', serif", fontSize: 18, fontWeight: 400,
+                  color: "var(--text)", marginBottom: 10
+                }}>
+                  Follow the conversion signal
+                </div>
+                <p style={{
+                  fontFamily: "'DM Sans', sans-serif", fontSize: 14, lineHeight: 1.7,
+                  color: "var(--muted)", margin: 0
+                }}>
+                  Don't excavate linearly. When an assessment surfaces something unexpectedly valuable,
+                  pivot and chase it — even if it means abandoning your original plan. The most
+                  convertible material is rarely where you expect it. This site exists because an
+                  excavation of a product spec led to a methodology discovery that was worth more
+                  than the spec itself.
+                </p>
+              </div>
+
               <StepCard
                 number={5}
                 title="Convert"
