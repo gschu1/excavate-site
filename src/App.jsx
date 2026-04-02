@@ -347,6 +347,129 @@ function StepCard({ number, title, description, detail, tier }) {
   );
 }
 
+const FORMSPREE_ID = "REPLACE_ME"; // replace with your Formspree form ID after signup
+
+function ContactForm() {
+  const [fields, setFields] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+
+  const handleChange = e => setFields(f => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setStatus("sending");
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(fields),
+      });
+      if (res.ok) {
+        setStatus("sent");
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  const inputStyle = {
+    width: "100%", padding: "12px 16px",
+    border: "1px solid var(--border)", borderRadius: 8,
+    background: "var(--bg)", color: "var(--text)",
+    fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+    outline: "none", transition: "border-color 0.15s",
+    boxSizing: "border-box"
+  };
+
+  const labelStyle = {
+    display: "block", fontSize: 13, fontFamily: "'DM Sans', sans-serif",
+    color: "var(--muted)", marginBottom: 8, fontWeight: 500
+  };
+
+  if (status === "sent") {
+    return (
+      <div style={{
+        padding: "40px 36px", textAlign: "center",
+        border: "1px solid var(--border)", borderRadius: 12, background: "var(--surface)"
+      }}>
+        <div style={{
+          fontFamily: "'Instrument Serif', serif", fontSize: 24,
+          color: "var(--text)", marginBottom: 10
+        }}>
+          Message sent.
+        </div>
+        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)" }}>
+          Thanks. I read every message.
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} style={{
+      border: "1px solid var(--border)", borderRadius: 12,
+      background: "var(--surface)", padding: "36px"
+    }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+        <div>
+          <label style={labelStyle}>Name</label>
+          <input
+            type="text" name="name" value={fields.name} onChange={handleChange}
+            required placeholder="Your name"
+            style={inputStyle}
+            onFocus={e => e.target.style.borderColor = "var(--accent)"}
+            onBlur={e => e.target.style.borderColor = "var(--border)"}
+          />
+        </div>
+        <div>
+          <label style={labelStyle}>Email</label>
+          <input
+            type="email" name="email" value={fields.email} onChange={handleChange}
+            required placeholder="your@email.com"
+            style={inputStyle}
+            onFocus={e => e.target.style.borderColor = "var(--accent)"}
+            onBlur={e => e.target.style.borderColor = "var(--border)"}
+          />
+        </div>
+      </div>
+      <div style={{ marginBottom: 24 }}>
+        <label style={labelStyle}>Message</label>
+        <textarea
+          name="message" value={fields.message} onChange={handleChange}
+          required rows={5}
+          placeholder="What are you sitting on? What have you found? What are you stuck on?"
+          style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
+          onFocus={e => e.target.style.borderColor = "var(--accent)"}
+          onBlur={e => e.target.style.borderColor = "var(--border)"}
+        />
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          style={{
+            padding: "12px 32px", background: "var(--accent)", color: "#fff",
+            border: "none", borderRadius: 8, cursor: status === "sending" ? "wait" : "pointer",
+            fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600,
+            opacity: status === "sending" ? 0.7 : 1, transition: "opacity 0.15s"
+          }}
+          onMouseOver={e => { if (status !== "sending") e.target.style.opacity = "0.85"; }}
+          onMouseOut={e => { if (status !== "sending") e.target.style.opacity = "1"; }}
+        >
+          {status === "sending" ? "Sending…" : "Send"}
+        </button>
+        {status === "error" && (
+          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#c0392b" }}>
+            Something went wrong — try emailing directly.
+          </span>
+        )}
+      </div>
+    </form>
+  );
+}
+
 function ConversionCard({ title, origin, plan, status, output, outputHref }) {
   const isLive = status === "Live";
   return (
@@ -495,6 +618,7 @@ export default function Excavate() {
               ["prompts", "Prompts"],
               ["cost", "Cost"],
               ["philosophy", "Philosophy"],
+              ["contact", "Get in touch"],
               ["about", "About"],
             ].map(([id, label]) => (
               <a
@@ -919,6 +1043,35 @@ export default function Excavate() {
                 judgment about what matters, and that's the one thing the AI can't do for you.
               </p>
             </div>
+          </section>
+
+          {/* GET IN TOUCH */}
+          <section id="contact" style={{ paddingBottom: "var(--section-gap)" }}>
+            <h2 style={{
+              fontFamily: "'Instrument Serif', serif", fontSize: 38, fontWeight: 400,
+              marginBottom: 16, lineHeight: 1.2
+            }}>
+              Sitting on a goldmine of chats?
+            </h2>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "var(--muted)",
+              lineHeight: 1.75, marginBottom: 36, maxWidth: 560
+            }}>
+              If you've spent months talking to AI and suspect there's value trapped in those
+              conversations — or if you've already started excavating and want to share what
+              you found — I'd like to hear from you.
+            </p>
+
+            <ContactForm />
+
+            <p style={{
+              marginTop: 20, fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              color: "var(--muted)", lineHeight: 1.65,
+              borderLeft: "2px solid var(--border)", paddingLeft: 16
+            }}>
+              This is also the beginning of guided excavation sessions — where I walk you through
+              your own data export. If that interests you, say so.
+            </p>
           </section>
 
           {/* ABOUT */}
