@@ -1,28 +1,65 @@
-# Excavation Site — Ideas Log
-Running list of potential revenue and growth ideas.
-Review periodically for timing.
+# Excavation Site — Running Log
 
-## Ideas
+## Project Goal
+The output is a folder of CONVERSIONS — ideas from chat exchanges
+pursued to completion as things of value to other humans. Each
+conversion is a case documented on the website with: origin
+(where in the chats), plan (how to convert), implementation
+status, and output (the thing that exists in the world).
 
-### 1. Guided excavation sessions
-**Added:** 2026-04-01
-**Status:** Parked — implement when site has traction
-**Description:** "Book a guided excavation session" button on
-the site. $150/hour, conducted over Zoom. Guy walks the person
-through their own data export using the methodology. No
-engineering needed — just scheduling and a payment link.
-**Trigger:** First 5-10 inbound inquiries or comments asking
-"can someone do this for me?"
+## Active Conversions
 
-### 2. SaaS version
-**Added:** 2026-04-01
-**Status:** Parked — requires validated demand
-**Description:** Upload zip → get dashboard with conversations
-ranked by conversion potential → click to excavate. Replaces
-manual Cowork workflow. Shares engineering DNA with PolicyLM.
-**Trigger:** 50+ people try the manual methodology and
-complain about friction.
+### Conversion 1: The Excavation Site itself
+- **Origin:** Chat exchange about parsing a ChatGPT data export
+  led to the realization that millions of people have the same
+  problem — value trapped in chat histories
+- **Plan:** Build a methodology site with prompts, cost calculator,
+  and philosophical framework
+- **Status:** LIVE at excavation-site.vercel.app
+- **Output:** Working website, deployed
+
+### Conversion 2: Boss Prompting methodology
+- **Origin:** AI Bootcamp chats, Dec 2025. Philosopher couldn't
+  code, routed through ChatGPT, discovered the output was better
+  than direct prompting. A disciplined form of vibe coding.
+- **Plan:** Write the definitive article. Name the methodology.
+  Publish. Possibly develop workshop format.
+- **Status:** IN PROGRESS — origin story excavated and documented,
+  article not yet written
+- **Output:** Pending
+
+## Parked Ideas (not yet conversions)
+
+### Guided excavation sessions
+- Added: 2026-04-01
+- Description: "Book a guided excavation session" on the site.
+  $150/hour over Zoom. Guy walks someone through their own export.
+- Trigger: First 5-10 inbound inquiries asking "can someone do
+  this for me?"
+
+### SaaS version
+- Added: 2026-04-01
+- Description: Upload zip, get dashboard, click to excavate.
+  Replaces manual Cowork workflow.
+- Trigger: 50+ people try the manual methodology and complain
+  about friction.
+
+## Methodological Principles (discovered during excavation)
+
+1. **Follow the conversion signal.** Don't excavate linearly.
+   When an assessment surfaces something unexpectedly valuable,
+   pivot and chase it.
+
+2. **Conversion-led excavation.** The excavation should behave
+   like a market, not a library. A library catalogs everything
+   equally. A market prices things by demand.
+
+3. **Retroactive product archaeology.** Not "what's in the
+   archive" but "what in the archive strengthens what I'm
+   building today."
+
+4. **Every session ends with:** "Did we find something
+   conversion-worthy? If yes, what's the plan to convert it?"
 
 ---
-*This log is maintained across Claude conversations.
-New ideas get added as they emerge.*
+*Log maintained across Claude sessions. Last updated 2026-04-02.*

@@ -347,6 +347,91 @@ function StepCard({ number, title, description, detail, tier }) {
   );
 }
 
+function ConversionCard({ title, origin, plan, status, output, outputHref }) {
+  const isLive = status === "Live";
+  return (
+    <div style={{
+      border: "1px solid var(--border)", borderRadius: 14,
+      background: "var(--surface)", overflow: "hidden",
+      position: "relative"
+    }}>
+      {/* Top accent bar */}
+      <div style={{
+        height: 4,
+        background: isLive
+          ? "linear-gradient(90deg, #2d7a4f, #4aab72)"
+          : "linear-gradient(90deg, #9c6b30, #c8943e)"
+      }} />
+      <div style={{ padding: "32px 36px" }}>
+        {/* Header row */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+          <h3 style={{
+            fontFamily: "'Instrument Serif', serif", fontSize: 26, fontWeight: 400,
+            color: "var(--text)", lineHeight: 1.2
+          }}>
+            {title}
+          </h3>
+          <span style={{
+            fontSize: 11, fontFamily: "'DM Sans', sans-serif", fontWeight: 700,
+            letterSpacing: 1, textTransform: "uppercase", whiteSpace: "nowrap",
+            padding: "5px 14px", borderRadius: 20, marginLeft: 16, marginTop: 4,
+            background: isLive ? "#1a4a3e33" : "#9c6b3022",
+            color: isLive ? "#2d7a4f" : "var(--accent-dark)",
+            border: isLive ? "1px solid #2d7a4f44" : "1px solid var(--accent)44"
+          }}>
+            {isLive ? "● Live" : "◐ In Progress"}
+          </span>
+        </div>
+        {/* Fields */}
+        <div style={{ display: "grid", gap: 18 }}>
+          {[
+            { label: "Origin", value: origin },
+            { label: "Plan", value: plan },
+          ].map(({ label, value }) => (
+            <div key={label} style={{ display: "grid", gridTemplateColumns: "80px 1fr", gap: 12, alignItems: "start" }}>
+              <span style={{
+                fontSize: 11, fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+                letterSpacing: 1, textTransform: "uppercase", color: "var(--muted)",
+                paddingTop: 2
+              }}>
+                {label}
+              </span>
+              <span style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)", lineHeight: 1.65
+              }}>
+                {value}
+              </span>
+            </div>
+          ))}
+          <div style={{ display: "grid", gridTemplateColumns: "80px 1fr", gap: 12, alignItems: "start" }}>
+            <span style={{
+              fontSize: 11, fontFamily: "'DM Sans', sans-serif", fontWeight: 600,
+              letterSpacing: 1, textTransform: "uppercase", color: "var(--muted)",
+              paddingTop: 2
+            }}>
+              Output
+            </span>
+            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, lineHeight: 1.65 }}>
+              {outputHref ? (
+                <a
+                  href={outputHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--accent)", textDecoration: "none", borderBottom: "1px solid var(--accent)" }}
+                >
+                  {output}
+                </a>
+              ) : (
+                <span style={{ color: "var(--muted)" }}>{output}</span>
+              )}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Excavate() {
   const [openPrompt, setOpenPrompt] = useState(null);
   const [activeSection, setActiveSection] = useState("problem");
@@ -404,6 +489,7 @@ export default function Excavate() {
           <div style={{ display: "flex", gap: 28, fontSize: 14, fontFamily: "'DM Sans', sans-serif" }}>
             {[
               ["problem", "The problem"],
+              ["conversions", "Conversions"],
               ["method", "Method"],
               ["download", "Download"],
               ["prompts", "Prompts"],
@@ -521,6 +607,46 @@ export default function Excavate() {
                   </span>
                 </div>
               ))}
+            </div>
+          </section>
+
+          {/* CONVERSIONS */}
+          <section id="conversions" style={{ paddingBottom: "var(--section-gap)" }}>
+            <div style={{
+              fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "var(--accent)",
+              fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 16
+            }}>
+              Conversions
+            </div>
+            <h2 style={{
+              fontFamily: "'Instrument Serif', serif", fontSize: 32, fontWeight: 400,
+              marginBottom: 10
+            }}>
+              Ideas excavated from chat histories, pursued to completion.
+            </h2>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)",
+              marginBottom: 36, lineHeight: 1.6, maxWidth: 560
+            }}>
+              This site documents its own conversions. Each card below is a real case:
+              where the idea came from, what it's becoming, and what exists in the world so far.
+            </p>
+            <div style={{ display: "grid", gap: 20 }}>
+              <ConversionCard
+                title="This website"
+                origin="A conversation about parsing a ChatGPT data export led to the realization that the process itself was the product."
+                plan="Build a methodology site for converting AI conversations into real-world output."
+                status="Live"
+                output="excavation-site.vercel.app"
+                outputHref="https://excavation-site.vercel.app"
+              />
+              <ConversionCard
+                title="Boss prompting"
+                origin="A philosopher in an AI DEV bootcamp couldn't prompt Cursor effectively. The workaround turned out to produce much better results than direct prompting."
+                plan="Document the methodology. Name it. Publish the definitive article."
+                status="In Progress"
+                output="Origin story excavated. Article pending."
+              />
             </div>
           </section>
 
@@ -666,7 +792,7 @@ export default function Excavate() {
               fontFamily: "'Instrument Serif', serif", fontSize: 32, fontWeight: 400,
               marginBottom: 10
             }}>
-              Six prompts for different excavation goals
+              Seven prompts for different excavation goals
             </h2>
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)",
