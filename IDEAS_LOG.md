@@ -44,6 +44,14 @@ status, and output (the thing that exists in the world).
 - Trigger: 50+ people try the manual methodology and complain
   about friction.
 
+### Karpathy-style compiled wiki layer
+- Added: 2026-04-03
+- Description: LLM-maintained knowledge base between raw archive
+  and website. Auto-compiled wiki with indexes, linting, search.
+  Inspired by Karpathy's April 2026 post on LLM knowledge bases.
+- Trigger: After 5+ completed conversions exist and the archive
+  is being queried regularly enough to justify infrastructure.
+
 ## Methodological Principles (discovered during excavation)
 
 1. **Follow the conversion signal.** Don't excavate linearly.
@@ -62,4 +70,4 @@ status, and output (the thing that exists in the world).
    conversion-worthy? If yes, what's the plan to convert it?"
 
 ---
-*Log maintained across Claude sessions. Last updated 2026-04-02.*
+*Log maintained across Claude sessions. Last updated 2026-04-03.*
