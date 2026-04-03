@@ -842,7 +842,106 @@ function BossPromptDemo() {
   );
 }
 
-export default function Excavate() {
+function BossPromptingPage() {
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href = FONTS_URL;
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }, []);
+
+  const css = `
+    :root {
+      --bg: #f7f5f0;
+      --surface: #fffef9;
+      --text: #1a1917;
+      --muted: #6b685e;
+      --border: #d8d5cb;
+      --accent: #9c6b30;
+      --accent-dark: #6b4820;
+      --accent-light: #f0e6d4;
+      --section-gap: 80px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1917;
+        --surface: #242320;
+        --text: #e8e6df;
+        --muted: #9c9a8e;
+        --border: #3a3835;
+        --accent: #c8943e;
+        --accent-dark: #e8b458;
+        --accent-light: #2e2518;
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    ::selection { background: var(--accent-light); color: var(--accent-dark); }
+  `;
+
+  return (
+    <>
+      <style>{css}</style>
+      <div style={{ background: "var(--bg)", color: "var(--text)", minHeight: "100vh" }}>
+        <nav style={{
+          padding: "16px 40px", display: "flex", justifyContent: "space-between",
+          alignItems: "center", borderBottom: "1px solid var(--border)",
+          position: "sticky", top: 0, background: "var(--bg)", zIndex: 100
+        }}>
+          <a href="/" style={{
+            fontFamily: "'Instrument Serif', serif", fontSize: 22,
+            color: "var(--text)", textDecoration: "none"
+          }}>
+            excavate
+          </a>
+          <a href="/" style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+            color: "var(--muted)", textDecoration: "none",
+            display: "flex", alignItems: "center", gap: 6
+          }}>
+            ← Back to home
+          </a>
+        </nav>
+
+        <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px" }}>
+          <section style={{ paddingTop: 64, paddingBottom: "var(--section-gap)" }}>
+            <div style={{
+              fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "var(--accent)",
+              fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 16
+            }}>
+              Boss prompting
+            </div>
+            <h1 style={{
+              fontFamily: "'Instrument Serif', serif", fontSize: 44, fontWeight: 400,
+              lineHeight: 1.2, marginBottom: 16
+            }}>
+              See the difference
+            </h1>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "var(--muted)",
+              marginBottom: 48, lineHeight: 1.7, maxWidth: 560
+            }}>
+              Four real scenarios. The same messy human prompt — routed directly to a builder
+              LLM, then routed through a planner LLM first. Pick an example, step through the panels.
+            </p>
+            <BossPromptDemo />
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)",
+              lineHeight: 1.7, marginTop: 36,
+              padding: "20px 24px",
+              borderLeft: "3px solid var(--border)",
+              fontStyle: "italic"
+            }}>
+              The planner LLM adds what you meant but didn't say — scope, constraints, phasing,
+              and acceptance criteria. The builder LLM executes better because it guesses less.
+            </p>
+          </section>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Excavate() {
   const [openPrompt, setOpenPrompt] = useState(null);
   const [activeSection, setActiveSection] = useState("problem");
 
@@ -900,7 +999,6 @@ export default function Excavate() {
             {[
               ["problem", "The problem"],
               ["conversions", "Conversions"],
-              ["see-the-difference", "See the difference"],
               ["method", "Method"],
               ["download", "Download"],
               ["prompts", "Prompts"],
@@ -967,7 +1065,7 @@ export default function Excavate() {
                 fontFamily: "'Instrument Serif', serif", fontSize: 19,
                 fontStyle: "italic", lineHeight: 1.6, color: "var(--text)"
               }}>
-                "Can I convert this into a monetary income stream somehow? Can I convert this into an output 
+                "Can I convert this into an income stream somehow? Can I convert this into an output
                 stream that will genuinely interest people? Where is the value located — in me, in the AI, 
                 in the interaction between us? What is the vocabulary to even talk about this?"
               </p>
@@ -1055,45 +1153,12 @@ export default function Excavate() {
               <ConversionCard
                 title="Boss prompting"
                 origin="A philosopher in an AI DEV bootcamp couldn't prompt Cursor effectively. The workaround turned out to produce much better results than direct prompting."
-                plan="Document the methodology. Name it. Publish the definitive article."
-                status="In Progress"
-                output="Origin story excavated. Article pending."
+                plan="Demonstrate the methodology through an interactive comparison."
+                status="Live"
+                output="See the difference →"
+                outputHref="/boss-prompting"
               />
             </div>
-          </section>
-
-          {/* SEE THE DIFFERENCE */}
-          <section id="see-the-difference" style={{ paddingBottom: "var(--section-gap)" }}>
-            <div style={{
-              fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "var(--accent)",
-              fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 16
-            }}>
-              Boss prompting
-            </div>
-            <h2 style={{
-              fontFamily: "'Instrument Serif', serif", fontSize: 32, fontWeight: 400,
-              marginBottom: 10
-            }}>
-              See the difference
-            </h2>
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)",
-              marginBottom: 36, lineHeight: 1.6, maxWidth: 560
-            }}>
-              Four real scenarios. The same messy human prompt — routed directly to a builder,
-              then routed through a planner first. Pick an example, step through the panels.
-            </p>
-            <BossPromptDemo />
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)",
-              lineHeight: 1.7, marginTop: 32,
-              padding: "20px 24px",
-              borderLeft: "3px solid var(--border)",
-              fontStyle: "italic"
-            }}>
-              The planner LLM adds what you meant but didn't say — scope, constraints, phasing,
-              and acceptance criteria. The builder LLM executes better because it guesses less.
-            </p>
           </section>
 
           {/* METHOD */}
@@ -1144,6 +1209,11 @@ export default function Excavate() {
                 description="Work through chunks using the extraction prompts. This is where conversion happens. Each prompt is designed to answer 'what can this become?' — not 'what does this say?'"
                 detail="Use Sonnet for classification and structured extraction. Use Opus when you need honest assessment, creative judgment, or tracking how ideas evolved over time."
               />
+              <StepCard
+                number={5}
+                title="Convert"
+                description="Take your extraction outputs and ship them. A blog post. A pitch deck. A product spec. A job application. The excavation is only valuable if something leaves the chat window and enters the world."
+              />
               <div style={{
                 padding: "22px 28px",
                 border: "1px solid var(--accent)",
@@ -1175,12 +1245,6 @@ export default function Excavate() {
                   than the spec itself.
                 </p>
               </div>
-
-              <StepCard
-                number={5}
-                title="Convert"
-                description="Take your extraction outputs and ship them. A blog post. A pitch deck. A product spec. A job application. The excavation is only valuable if something leaves the chat window and enters the world."
-              />
             </div>
           </section>
 
@@ -1417,7 +1481,7 @@ export default function Excavate() {
                 weren't planned — they emerged from trying to figure out what three years of AI
                 conversations were really worth. Built by{" "}
                 <a
-                  href="https://github.com/gschul"
+                  href="https://github.com/gschu1"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: "var(--accent)", textDecoration: "none", borderBottom: "1px solid var(--accent)" }}
@@ -1449,4 +1513,10 @@ export default function Excavate() {
       </div>
     </>
   );
+}
+
+export default function App() {
+  const path = window.location.pathname;
+  if (path === "/boss-prompting") return <BossPromptingPage />;
+  return <Excavate />;
 }
