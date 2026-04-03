@@ -555,6 +555,293 @@ function ConversionCard({ title, origin, plan, status, output, outputHref }) {
   );
 }
 
+const BOSS_EXAMPLES = [
+  {
+    id: "rag",
+    label: "RAG system",
+    human: "Build me a RAG system for our company docs",
+    structured: `GOAL
+Build a production-ready RAG pipeline for company document Q&A.
+
+STACK
+Python · LlamaIndex · Qdrant
+
+NON-NEGOTIABLES
+- Do NOT modify existing API endpoints
+- Do NOT create new database tables
+- Keep chunk size under 512 tokens
+
+PHASED EXECUTION
+Phase A — Inventory existing docs and formats (PDF, DOCX, Confluence pages)
+Phase B — Design chunking strategy; justify chunk size and overlap
+Phase C — Implement indexing pipeline; ingest to Qdrant
+Phase D — Build /query endpoint; return answer + cited passage IDs
+Phase E — Verify with 5 representative test queries; document results
+
+ACCEPTANCE CRITERIA
+✓ Returns cited passages with every answer
+✓ P95 latency under 3 seconds
+✓ Handles both PDF and DOCX inputs
+
+DELIVERABLES
+Working code · Test results with citations · Summary of assumptions made`,
+  },
+  {
+    id: "landing",
+    label: "Landing page",
+    human: "Make the landing page look better",
+    structured: `GOAL
+Improve visual hierarchy and conversion signals on the landing page.
+
+SCOPE
+Only modify index.html and styles.css.
+Do NOT touch navigation, routing, or any other page.
+
+NON-NEGOTIABLES
+- Preserve all existing content and links exactly
+- Do NOT change the color palette
+- Do NOT add JavaScript dependencies
+
+PHASED EXECUTION
+Phase A — Audit current layout; identify the top 3 hierarchy problems
+Phase B — Propose exactly 3 specific changes with rationale for each
+Phase C — Implement approved changes only
+Phase D — Produce before/after screenshots for review
+
+ACCEPTANCE CRITERIA
+✓ Page loads in under 2 seconds
+✓ All existing links still resolve correctly
+✓ Layout is mobile responsive at 375px, 768px, and 1440px
+
+DELIVERABLES
+Modified files · Before/after comparison · Changelog (what changed and why)`,
+  },
+  {
+    id: "auth",
+    label: "Authentication",
+    human: "Add user authentication to the app",
+    structured: `GOAL
+Add email/password authentication with persistent session management.
+
+STACK
+Existing Express backend · bcrypt for password hashing · JWT for sessions
+
+NON-NEGOTIABLES
+- Do NOT modify existing API routes
+- Do NOT store passwords in plaintext — bcrypt only
+- Do NOT add OAuth or social login — email/password only for now
+
+PHASED EXECUTION
+Phase A — Recon existing user model and routes; document what exists
+Phase B — Design auth schema additions; get approval before writing code
+Phase C — Implement POST /auth/register
+Phase D — Implement POST /auth/login; return signed JWT
+Phase E — Add auth middleware for protected routes
+Phase F — Verify end-to-end with a test user; provide curl commands
+
+ACCEPTANCE CRITERIA
+✓ Registration creates a hashed-password user record
+✓ Login returns a valid JWT
+✓ Protected routes return 401 for unauthenticated requests
+
+DELIVERABLES
+Working code · Test commands (curl) · Migration notes · Assumptions log`,
+  },
+  {
+    id: "tests",
+    label: "Payment tests",
+    human: "Write tests for the payment module",
+    structured: `GOAL
+Add comprehensive test coverage for the payment processing module.
+
+SCOPE
+Test files in /src/payments/ only.
+Do NOT modify any production code.
+Do NOT mock the database — use test fixtures.
+
+NON-NEGOTIABLES
+- Every test must be fully independent; no shared mutable state
+- Do NOT test the live Stripe API — mock it at the SDK boundary
+- Tests must pass in CI with no network access
+
+PHASED EXECUTION
+Phase A — Inventory existing payment functions; document all edge cases
+Phase B — Design test matrix: happy paths, error paths, edge cases
+Phase C — Implement unit tests
+Phase D — Implement integration tests against fixtures
+Phase E — Run full suite; report coverage and flag any flaky tests
+
+ACCEPTANCE CRITERIA
+✓ All tests pass reliably in CI
+✓ Coverage above 80% for /src/payments/
+✓ Zero flaky tests (no retries required)
+
+DELIVERABLES
+Test files · Coverage report · List of untestable areas with explanation`,
+  },
+];
+
+function BossPromptDemo() {
+  const [activeExample, setActiveExample] = useState(0);
+  const [activePanel, setActivePanel] = useState(0);
+
+  const ex = BOSS_EXAMPLES[activeExample];
+
+  const panels = [
+    {
+      label: "Your prompt",
+      tag: "What you type",
+    },
+    {
+      label: "One hop: human → builder LLM",
+      tag: "Direct to builder",
+    },
+    {
+      label: "Two hops: human → planner LLM → builder LLM",
+      tag: "Through a planner",
+    },
+  ];
+
+  return (
+    <div>
+      {/* Example selector */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 24, flexWrap: "wrap" }}>
+        {BOSS_EXAMPLES.map((ex, i) => (
+          <button
+            key={ex.id}
+            onClick={() => { setActiveExample(i); setActivePanel(0); }}
+            style={{
+              padding: "8px 18px", borderRadius: 20, cursor: "pointer",
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600,
+              border: activeExample === i ? "2px solid var(--accent)" : "1px solid var(--border)",
+              background: activeExample === i ? "var(--accent-light)" : "transparent",
+              color: activeExample === i ? "var(--accent-dark)" : "var(--muted)",
+              transition: "all 0.15s"
+            }}
+          >
+            {ex.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Panel tabs */}
+      <div style={{
+        display: "flex", borderBottom: "1px solid var(--border)", marginBottom: 0, gap: 0
+      }}>
+        {panels.map((p, i) => (
+          <button
+            key={i}
+            onClick={() => setActivePanel(i)}
+            style={{
+              padding: "10px 18px", cursor: "pointer",
+              fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 600,
+              border: "none", borderBottom: activePanel === i ? "2px solid var(--accent)" : "2px solid transparent",
+              background: "transparent",
+              color: activePanel === i ? "var(--accent-dark)" : "var(--muted)",
+              letterSpacing: 0.3, transition: "all 0.15s",
+              marginBottom: -1
+            }}
+          >
+            {p.tag}
+          </button>
+        ))}
+      </div>
+
+      {/* Panel content */}
+      <div style={{
+        border: "1px solid var(--border)", borderTop: "none",
+        borderRadius: "0 0 12px 12px", overflow: "hidden"
+      }}>
+        {/* Panel label */}
+        <div style={{
+          padding: "10px 24px", background: "var(--surface)",
+          borderBottom: "1px solid var(--border)",
+          fontSize: 11, fontFamily: "'DM Sans', sans-serif",
+          color: "var(--muted)", fontWeight: 600, letterSpacing: 1.2, textTransform: "uppercase"
+        }}>
+          {panels[activePanel].label}
+        </div>
+
+        {/* Panel 0: Your prompt — casual handwritten feel */}
+        {activePanel === 0 && (
+          <div style={{
+            padding: "40px 48px", background: "var(--bg)",
+            minHeight: 220, display: "flex", alignItems: "center"
+          }}>
+            <p style={{
+              fontFamily: "'Instrument Serif', serif",
+              fontStyle: "italic",
+              fontSize: 28,
+              lineHeight: 1.5,
+              color: "var(--text)",
+              maxWidth: 480
+            }}>
+              "{ex.human}"
+            </p>
+          </div>
+        )}
+
+        {/* Panel 1: Direct to builder */}
+        {activePanel === 1 && (
+          <div style={{ padding: "28px 32px", background: "var(--bg)", minHeight: 220 }}>
+            <div style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: 8, padding: "20px 24px",
+              fontFamily: "'DM Sans', sans-serif", fontSize: 15,
+              color: "var(--text)", lineHeight: 1.7, marginBottom: 20
+            }}>
+              {ex.human}
+            </div>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+              color: "var(--muted)", lineHeight: 1.7,
+              padding: "12px 16px",
+              borderLeft: "2px solid var(--border)",
+              fontStyle: "italic"
+            }}>
+              The builder LLM must guess your intent, constraints, scope, and quality bar.
+              It will try to be helpful — and drift.
+            </p>
+          </div>
+        )}
+
+        {/* Panel 2: Through a planner */}
+        {activePanel === 2 && (
+          <div style={{ background: "#1a1917", minHeight: 220 }}>
+            <pre style={{
+              padding: "28px 32px",
+              fontSize: 12.5, lineHeight: 1.8,
+              color: "#e8e6df",
+              fontFamily: "'DM Mono', 'Fira Mono', 'Cascadia Code', 'Menlo', monospace",
+              whiteSpace: "pre-wrap", wordBreak: "break-word",
+              margin: 0
+            }}>
+              {ex.structured}
+            </pre>
+          </div>
+        )}
+      </div>
+
+      {/* Step indicators */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 20 }}>
+        {panels.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setActivePanel(i)}
+            style={{
+              width: activePanel === i ? 24 : 8, height: 8,
+              borderRadius: 4, border: "none", cursor: "pointer",
+              background: activePanel === i ? "var(--accent)" : "var(--border)",
+              transition: "all 0.2s", padding: 0
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Excavate() {
   const [openPrompt, setOpenPrompt] = useState(null);
   const [activeSection, setActiveSection] = useState("problem");
@@ -613,6 +900,7 @@ export default function Excavate() {
             {[
               ["problem", "The problem"],
               ["conversions", "Conversions"],
+              ["see-the-difference", "See the difference"],
               ["method", "Method"],
               ["download", "Download"],
               ["prompts", "Prompts"],
@@ -772,6 +1060,40 @@ export default function Excavate() {
                 output="Origin story excavated. Article pending."
               />
             </div>
+          </section>
+
+          {/* SEE THE DIFFERENCE */}
+          <section id="see-the-difference" style={{ paddingBottom: "var(--section-gap)" }}>
+            <div style={{
+              fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "var(--accent)",
+              fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 16
+            }}>
+              Boss prompting
+            </div>
+            <h2 style={{
+              fontFamily: "'Instrument Serif', serif", fontSize: 32, fontWeight: 400,
+              marginBottom: 10
+            }}>
+              See the difference
+            </h2>
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)",
+              marginBottom: 36, lineHeight: 1.6, maxWidth: 560
+            }}>
+              Four real scenarios. The same messy human prompt — routed directly to a builder,
+              then routed through a planner first. Pick an example, step through the panels.
+            </p>
+            <BossPromptDemo />
+            <p style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "var(--muted)",
+              lineHeight: 1.7, marginTop: 32,
+              padding: "20px 24px",
+              borderLeft: "3px solid var(--border)",
+              fontStyle: "italic"
+            }}>
+              The planner LLM adds what you meant but didn't say — scope, constraints, phasing,
+              and acceptance criteria. The builder LLM executes better because it guesses less.
+            </p>
           </section>
 
           {/* METHOD */}
