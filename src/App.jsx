@@ -470,8 +470,9 @@ function ContactForm() {
   );
 }
 
-function ConversionCard({ title, origin, plan, status, output, outputHref }) {
+function ConversionCard({ title, origin, plan, status, output, outputHref, outputNote, enrichment }) {
   const isLive = status === "Live";
+  const isInternal = outputHref && outputHref.startsWith("/");
   return (
     <div style={{
       border: "1px solid var(--border)", borderRadius: 14,
@@ -535,11 +536,13 @@ function ConversionCard({ title, origin, plan, status, output, outputHref }) {
               Output
             </span>
             <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, lineHeight: 1.65 }}>
+              {outputNote && (
+                <span style={{ color: "var(--muted)", display: "block", marginBottom: 6 }}>{outputNote}</span>
+              )}
               {outputHref ? (
                 <a
                   href={outputHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(!isInternal && { target: "_blank", rel: "noopener noreferrer" })}
                   style={{ color: "var(--accent)", textDecoration: "none", borderBottom: "1px solid var(--accent)" }}
                 >
                   {output}
@@ -550,6 +553,16 @@ function ConversionCard({ title, origin, plan, status, output, outputHref }) {
             </span>
           </div>
         </div>
+        {enrichment && (
+          <div style={{
+            marginTop: 20, paddingTop: 18, borderTop: "1px solid var(--border)",
+            fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "var(--accent-dark)",
+            display: "flex", alignItems: "center", gap: 8
+          }}>
+            <span style={{ fontSize: 14 }}>★</span>
+            <span>{enrichment}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -839,6 +852,189 @@ function BossPromptDemo() {
         ))}
       </div>
     </div>
+  );
+}
+
+function DecisionWorkspacePage() {
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.href = FONTS_URL;
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }, []);
+
+  const css = `
+    :root {
+      --bg: #f7f5f0;
+      --surface: #fffef9;
+      --text: #1a1917;
+      --muted: #6b685e;
+      --border: #d8d5cb;
+      --accent: #9c6b30;
+      --accent-dark: #6b4820;
+      --accent-light: #f0e6d4;
+      --section-gap: 80px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1917;
+        --surface: #242320;
+        --text: #e8e6df;
+        --muted: #9c9a8e;
+        --border: #3a3835;
+        --accent: #c8943e;
+        --accent-dark: #e8b458;
+        --accent-light: #2e2518;
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    ::selection { background: var(--accent-light); color: var(--accent-dark); }
+  `;
+
+  const howItWorksCards = [
+    {
+      title: "Dump",
+      body: "Upload documents, paste notes, describe your situation in plain language. No forms, no structure required — that's the system's job.",
+    },
+    {
+      title: "Clarify",
+      body: "The system asks targeted follow-up questions to fill gaps: What's the decision? Who are the stakeholders? What are the constraints? It builds the structure you didn't have to provide.",
+    },
+    {
+      title: "Decide",
+      body: "A structured memo with cited options, a recommendation, decision triggers, and an evidence trail. Every claim linked to its source. Auditable from end to end.",
+    },
+  ];
+
+  return (
+    <>
+      <style>{css}</style>
+      <div style={{ background: "var(--bg)", color: "var(--text)", minHeight: "100vh" }}>
+        <nav style={{
+          padding: "16px 40px", display: "flex", justifyContent: "space-between",
+          alignItems: "center", borderBottom: "1px solid var(--border)",
+          position: "sticky", top: 0, background: "var(--bg)", zIndex: 100
+        }}>
+          <a href="/" style={{
+            fontFamily: "'Instrument Serif', serif", fontSize: 22,
+            color: "var(--text)", textDecoration: "none"
+          }}>
+            excavate
+          </a>
+          <a href="/" style={{
+            fontFamily: "'DM Sans', sans-serif", fontSize: 14,
+            color: "var(--muted)", textDecoration: "none",
+            display: "flex", alignItems: "center", gap: 6
+          }}>
+            ← Back to home
+          </a>
+        </nav>
+
+        <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px" }}>
+          <section style={{ paddingTop: 64, paddingBottom: "var(--section-gap)" }}>
+            {/* Header */}
+            <div style={{
+              fontSize: 13, fontFamily: "'DM Sans', sans-serif", color: "var(--accent)",
+              fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 16
+            }}>
+              Product
+            </div>
+            <h1 style={{
+              fontFamily: "'Instrument Serif', serif", fontSize: 44, fontWeight: 400,
+              lineHeight: 1.2, marginBottom: 14
+            }}>
+              Decision Workspace
+            </h1>
+            <p style={{
+              fontFamily: "'Instrument Serif', serif", fontSize: 20, fontStyle: "italic",
+              color: "var(--muted)", marginBottom: 40, lineHeight: 1.5
+            }}>
+              Auditable decisions from your organization's own documents.
+            </p>
+
+            {/* Body */}
+            <div style={{
+              fontFamily: "'DM Sans', sans-serif", fontSize: 16, lineHeight: 1.8,
+              color: "var(--muted)", maxWidth: 600
+            }}>
+              <p style={{ marginBottom: 20 }}>
+                An employee facing a decision dumps whatever they have — documents, notes,
+                half-formed thoughts — into the system. It reads the mess, asks a few targeted
+                follow-up questions, and generates a structured memo with cited options, a
+                recommendation, and decision triggers — what new evidence would flip the recommendation.
+              </p>
+              <p style={{ marginBottom: 20 }}>
+                The organization's admin pre-loads company documents, policies, and org chart data,
+                so the system already knows the institutional context before any employee touches it.
+              </p>
+              <p>
+                Every claim in the output traces to a source document. Every run produces the same
+                canonical structure. The whole pipeline is auditable — built for organizations that
+                can't rely on individual employees' prompting skills to get reliable output from AI.
+              </p>
+            </div>
+          </section>
+
+          {/* How it works */}
+          <section style={{ paddingBottom: "var(--section-gap)" }}>
+            <h2 style={{
+              fontFamily: "'Instrument Serif', serif", fontSize: 32, fontWeight: 400,
+              marginBottom: 32
+            }}>
+              How it works
+            </h2>
+            <div style={{ display: "grid", gap: 16 }}>
+              {howItWorksCards.map(({ title, body }) => (
+                <div key={title} style={{
+                  padding: "28px 32px", border: "1px solid var(--border)", borderRadius: 12,
+                  background: "var(--surface)"
+                }}>
+                  <h3 style={{
+                    fontFamily: "'Instrument Serif', serif", fontSize: 21, fontWeight: 400,
+                    margin: "0 0 10px", color: "var(--text)"
+                  }}>
+                    {title}
+                  </h3>
+                  <p style={{
+                    fontSize: 15, color: "var(--muted)", fontFamily: "'DM Sans', sans-serif",
+                    lineHeight: 1.65, margin: 0
+                  }}>
+                    {body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Status note */}
+          <section style={{ paddingBottom: "var(--section-gap)" }}>
+            <div style={{
+              padding: "22px 28px",
+              border: "1px solid var(--accent)",
+              borderLeft: "4px solid var(--accent)",
+              borderRadius: "0 10px 10px 0",
+              background: "var(--accent-light)"
+            }}>
+              <div style={{
+                fontSize: 11, fontFamily: "'DM Sans', sans-serif", fontWeight: 700,
+                letterSpacing: 1.2, textTransform: "uppercase", color: "var(--accent-dark)",
+                marginBottom: 10
+              }}>
+                Live project
+              </div>
+              <p style={{
+                fontFamily: "'DM Sans', sans-serif", fontSize: 14, lineHeight: 1.7,
+                color: "var(--muted)", margin: 0
+              }}>
+                This is a live project. The excavation that produced this site also serves
+                this product — past thinking enriches present building. Status updates will
+                appear here as the product develops.
+              </p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -1157,6 +1353,16 @@ function Excavate() {
                 status="Live"
                 output="See the difference →"
                 outputHref="/boss-prompting"
+              />
+              <ConversionCard
+                title="Decision Workspace"
+                origin="Six months of conversations about organizational structure and AI-assisted reasoning converged on a single question: what if an employee could dump a mess of documents and get back an auditable memo with cited sources and decision triggers?"
+                plan="Build a B2B SaaS decision-making workspace. Currently in early development."
+                status="In Progress"
+                outputNote="Working engine built. Conversational intake layer in design."
+                output="Learn more →"
+                outputHref="/decision-workspace"
+                enrichment="Live enrichment: the excavation actively serves this product's development."
               />
             </div>
           </section>
@@ -1518,5 +1724,6 @@ function Excavate() {
 export default function App() {
   const path = window.location.pathname;
   if (path === "/boss-prompting") return <BossPromptingPage />;
+  if (path === "/decision-workspace") return <DecisionWorkspacePage />;
   return <Excavate />;
 }
